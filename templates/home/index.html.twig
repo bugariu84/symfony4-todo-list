@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+{% block title %}Homepage{% endblock %}
+{% block body %}
+    <h1>List items</h1>
+
+    <form action="{{ path('item_create') }}" method="post">
+        <p>Create a new item</p>
+        <input type="text" name="title" placeholder="Enter task name"/> <br />
+        <textarea name="body" id="" cols="30" rows="10" placeholder="Item description"></textarea> <br />
+        <input type="submit" name="submit_item" value="Add item">
+    </form>
+
+    <ol>
+        {% for item in items %}
+            <li>{{ item.title }} |
+                <i><a href="{{ path('item_delete', {id: item.id}) }}">delete</a></i>
+                <i><a href="{{ path('home_edit', {id: item.id}) }}">edit</a></i>
+            </li>
+        {% endfor %}
+    </ol>
+{% endblock %}
