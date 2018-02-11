@@ -6,6 +6,7 @@ use App\Entity\Item;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,19 +22,22 @@ class ItemController extends Controller implements RestInterface
      *
      * @param Request $request
      * @param EntityManagerInterface $entityManager
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return JsonResponse
      */
     public function create(Request $request, EntityManagerInterface $entityManager)
     {
         // Create a new toto item
+        $formData = $request->request->get('form');
+
         $item = new Item();
-        $item->setTitle($request->get('title'));
-        $item->setBody($request->get('body'));
+        $item->setTitle($formData['title']);
+        $item->setDescription($formData['description']);
+        $item->setPriority($formData['priority']);
 
         $entityManager->persist($item);
         $entityManager->flush();
 
-        return $this->redirectToRoute('homepage');
+        return new JsonResponse([]);
     }
 
     /**
@@ -42,12 +46,14 @@ class ItemController extends Controller implements RestInterface
      * @param $id
      * @param Request $request
      * @param EntityManagerInterface $entityManager
+     * 
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function update($id, Request $request, EntityManagerInterface $entityManager)
     {
         $item = $entityManager->getRepository('App:Item')->find($id);
         $item->setTitle($request->request->get('title'));
-        $item->setBody($request->request->get('body'));
+        $item->setDescription($request->request->get('body'));
 
         $entityManager->flush();
 

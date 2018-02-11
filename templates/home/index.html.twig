@@ -3,19 +3,56 @@
 {% block body %}
     <h1>List items</h1>
 
-    <form action="{{ path('item_create') }}" method="post">
-        <p>Create a new item</p>
-        <input type="text" name="title" placeholder="Enter task name"/> <br />
-        <textarea name="body" id="" cols="30" rows="10" placeholder="Item description"></textarea> <br />
-        <input type="submit" name="submit_item" value="Add item">
-    </form>
+    <table class="table" id="list-items">
+        <thead>
+            <tr>
+                <th>Order</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Actions <button class="btn btn-primary btn-sm create" data-url="{{ path('home_create') }}">New</button></th>
+            </tr>
+        </thead>
 
-    <ol>
+        <tbody>
         {% for item in items %}
-            <li>{{ item.title }} |
-                <i><a href="{{ path('item_delete', {id: item.id}) }}">delete</a></i>
-                <i><a href="{{ path('home_edit', {id: item.id}) }}">edit</a></i>
-            </li>
+
+            <tr id="item-row-{{ item.id }}">
+                <td scope="row">{{ item.priority }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.description }}</td>
+                <td>
+                    <a href="{{ path('item_delete', {id: item.id}) }}" data-id="{{ item.id }}" class="btn btn-danger btn-sm item-delete">delete</a>
+                    <a href="{{ path('home_edit', {id: item.id}) }}" class="btn btn-danger btn-sm item-edit">edit</a>
+                </td>
+            </tr>
+
         {% endfor %}
-    </ol>
+        </tbody>
+
+        <tfoot>
+            <tr>
+                <td colspan="4">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        </ul>
+                    </nav>
+                </td>
+            </tr>
+        </tfoot>
+
+    </table>
+
+{% endblock %}
+
+{% block modal %}
+
+    {% include 'modal/delete.html.twig' %}
+    {% include 'modal/create.html.twig' %}
+    {% include 'modal/edit.html.twig' %}
+
 {% endblock %}

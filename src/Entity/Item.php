@@ -17,6 +17,12 @@ class Item
     private $id;
 
     /**
+     * @ORM\Column(type="integer", options={"default": 0})
+     * @ORM\GeneratedValue
+     */
+    private $priority;
+
+    /**
      * @ORM\Column(type="string", length=100, nullable=false)
      */
     private $title;
@@ -24,7 +30,7 @@ class Item
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $body;
+    private $description;
 
     /**
      * @return mixed
@@ -61,16 +67,36 @@ class Item
     /**
      * @return mixed
      */
-    public function getBody()
+    public function getDescription()
     {
-        return $this->body;
+        return $this->description;
     }
 
     /**
-     * @param mixed $body
+     * @param mixed $description
      */
-    public function setBody($body): void
+    public function setDescription($description): void
     {
-        $this->body = $body;
+        $this->description = $description;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPriority()
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @param mixed $priority
+     */
+    public function setPriority($priority): void
+    {
+        if(null !== $priority) {
+            $this->priority = $priority;
+        }
+
+        $this->priority = 1;
     }
 }
